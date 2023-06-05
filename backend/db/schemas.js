@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -45,15 +47,19 @@ const userSchema = new mongoose.Schema({
 });
 
 const concertSchema = new mongoose.Schema({
+  id: String,
   name: String,
+  url: String,
   date: mongoose.Schema.Types.Date,
-  venue: String,
+  venue: {
+    name: String,
+    postalCode: String,
+    city: String,
+    stateCode: String,
+    countryCode: String,
+    address: String,
+  },
   images: [String],
 });
-/**
- * name
- * date
- * 
- */
 
 module.exports = { userSchema, concertSchema };

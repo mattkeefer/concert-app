@@ -20,8 +20,7 @@ const Concert = mongoose.model("Concert", concertSchema);
 
 const auth = async (req, res, next) => {
   try {
-    console.log(req.headers);
-    const token = await req.headers.authorization.split(" ")[1];
+    const token = await req.headers.Authorization.split(" ")[1];
     const decodedToken = await jwt.verify(token, "RANDOM-TOKEN");
     const user = await decodedToken;
     req.user = user;
@@ -32,10 +31,6 @@ const auth = async (req, res, next) => {
     });
   }
 };
-
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
-});
 
 app.get("/users", async (req, res) => {
   try {

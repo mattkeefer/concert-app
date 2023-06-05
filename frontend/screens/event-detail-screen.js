@@ -15,9 +15,8 @@ import EventInterestButton from "../components/buttons/event-interest-button";
 
 const EventDetailScreen = () => {
   const route = useRoute();
-  const { eventId, name, description, date, images, venues } = route.params;
+  const { eventId, name, url, date, venue, images } = route.params;
   const navigation = useNavigation();
-  const startTime = new Date(date.start.dateTime);
 
   useLayoutEffect(() => {
     navigation.setOptions({

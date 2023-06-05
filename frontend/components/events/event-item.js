@@ -8,9 +8,8 @@ import {
 } from "react-native";
 import { memo } from "react";
 
-const EventItem = ({ id, name, description, date, images, venues }) => {
+const EventItem = ({ id, name, url, date, venue, images }) => {
   const navigation = useNavigation();
-  const startTime = new Date(date.start.dateTime);
   return (
     <TouchableOpacity
       style={styles.card}
@@ -18,10 +17,10 @@ const EventItem = ({ id, name, description, date, images, venues }) => {
         navigation.navigate("Event", {
           eventId: id,
           name,
-          description,
+          url,
           date,
+          venue,
           images,
-          venues,
         });
       }}
     >
@@ -40,15 +39,15 @@ const EventItem = ({ id, name, description, date, images, venues }) => {
           </View>
           <View style={{ flex: 1, justifyContent: "flex-start" }}>
             <Text numberOfLines={1} style={styles.body}>
-              {startTime
+              {date
                 .toLocaleDateString()
                 .substring(0, startTime.toLocaleDateString().indexOf("/", 3))}
             </Text>
             <Text numberOfLines={1} style={styles.body}>
-              {venues[0].name}
+              {venue.name}
             </Text>
-            <Text numberOfLines={1} style={[styles.body, {color: '#bbb'}]}>
-              {venues[0].city.name}, {venues[0].state.stateCode}, {venues[0].country.countryCode}
+            <Text numberOfLines={1} style={[styles.body, { color: "#bbb" }]}>
+              {venue.city}, {venue.stateCode}, {venue.countryCode}
             </Text>
           </View>
         </View>

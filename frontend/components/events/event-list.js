@@ -7,10 +7,17 @@ const EventList = ({ data }) => {
       <EventItem
         id={item.id}
         name={item.name}
-        description={item.description}
-        date={item.dates}
+        url={item.url}
+        date={new Date(item.dates.start.dateTime)}
+        venue={{
+          name: item._embedded.venues[0].name,
+          postalCode: item._embedded.venues[0].postalCode,
+          city: item._embedded.venues[0].city.name,
+          stateCode: item._embedded.venues[0].state.stateCode,
+          countryCode: item._embedded.venues[0].country.countryCode,
+          address: item._embedded.venues[0].address.line1,
+        }}
         images={item.images.map((img) => img.url)}
-        venues={item._embedded.venues}
       />
     );
   };
