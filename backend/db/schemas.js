@@ -20,25 +20,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  friends: [
+  following: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  interestedConcerts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Concert",
-    },
-  ],
-  attendingConcerts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Concert",
-    },
-  ],
-  pastConcerts: [
+  history: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Concert",
@@ -62,4 +50,9 @@ const concertSchema = new mongoose.Schema({
   images: [String],
 });
 
-module.exports = { userSchema, concertSchema };
+const interestSchema = new mongoose.Schema({
+  userEmail: String,
+  concertID: String,
+});
+
+module.exports = { userSchema, concertSchema, interestSchema };

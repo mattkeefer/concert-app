@@ -1,7 +1,11 @@
 require("dotenv").config();
 
 const { EXAMPLE_DATA } = require("./data/example.js");
-const { userSchema, concertSchema } = require("./db/schemas.js");
+const {
+  userSchema,
+  concertSchema,
+  interestSchema,
+} = require("./db/schemas.js");
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -10,14 +14,23 @@ const jwt = require("jsonwebtoken");
 const app = express();
 app.use(express.json());
 
+const userRoute = require("./routes/User.js");
+const concertRoute = require("./routes/Concert.js");
+const interestRoute = require("./routes/Interest.js");
+const followingRoute = require("./routes/Following.js");
+app.use("/users", userRoute);
+app.use("/concerts", concertRoute);
+app.use("/interests", interestRoute);
+app.use("/followings", followingRoute);
+
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 const User = mongoose.model("User", userSchema);
-const Concert = mongoose.model("Concert", concertSchema);
 
+// Check authorization token to protect endpoint
 const auth = async (req, res, next) => {
   try {
     const token = await req.headers.Authorization.split(" ")[1];
@@ -32,18 +45,7 @@ const auth = async (req, res, next) => {
   }
 };
 
-app.get("/users", async (req, res) => {
-  try {
-    const data = await User.find({});
-    if (!data) {
-      res.send("No entries found");
-    }
-    res.send(data);
-  } catch (err) {
-    console.log(err);
-  }
-});
-
+// Register a new user using email, username, password
 app.post("/register", (req, res) => {
   bcrypt
     .hash(req.body.password, 10)
@@ -78,6 +80,7 @@ app.post("/register", (req, res) => {
     });
 });
 
+// Login using email and password, return token if successful
 app.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -123,18 +126,6 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     res.status(500).send({
       message: "Error occurred while logging in",
-      err,
-    });
-  }
-});
-
-app.get("/concerts", (req, res) => {
-  try {
-    res.send(EXAMPLE_DATA);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({
-      message: "Error fetching concerts",
       err,
     });
   }
