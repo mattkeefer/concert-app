@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  email: {
+  phone_no: {
     type: String,
-    required: [true, "Please provide an email"],
-    unique: [true, "Email taken"],
+    required: false,
+    unique: [true, "Phone number in use"],
   },
   username: {
     type: String,
@@ -16,11 +16,23 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please provide a password"],
     unique: false,
   },
-  spotifyId: {
+  name: {
     type: String,
     required: false,
+    unique: false,
   },
-  following: [
+  image: {
+    type: String,
+    required: false,
+    unique: false,
+  },
+  location: {
+    type: String,
+    required: false,
+    unique: false,
+  },
+  following: [String],
+  friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -36,6 +48,7 @@ const userSchema = new mongoose.Schema({
 
 const concertSchema = new mongoose.Schema({
   id: String,
+  artists: [{ name: String, image: String }],
   name: String,
   url: String,
   date: mongoose.Schema.Types.Date,
@@ -47,11 +60,11 @@ const concertSchema = new mongoose.Schema({
     countryCode: String,
     address: String,
   },
-  images: [String],
+  image: String,
 });
 
 const interestSchema = new mongoose.Schema({
-  userEmail: String,
+  username: String,
   concertID: String,
 });
 

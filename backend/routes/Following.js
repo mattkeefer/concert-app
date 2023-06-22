@@ -5,87 +5,67 @@ const { userSchema } = require("../db/schemas");
 
 const User = mongoose.model("User", userSchema);
 
-// Get list of users this user is following
+// Get list of artists followed by the user
 router.get("/", async (req, res) => {
-  if (req.query.userEmail) {
-    const user = await User.findOne({ email: req.query.userEmail });
-    if (!user) {
-      res.status(404).send({
-        message: "Could not find user",
-      });
-    } else {
-      res.send(user.following);
-    }
-  } else {
-    res.status(400).send({
-      message: "No email provided",
-    });
+  if (!req.query.user) {
+    res.status(400).send({ message: "No user provided" });
+    return;
   }
+  const user = User.findOne({ username: req.query.user });
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+  res.send(user.following);
 });
 
-// Add user to user's following list
+// Follow an artist
 router.post("/", async (req, res) => {
+  if (!(req.body.user && req.body.artist)) {
+    res.status(400).send({ message: "Missing required params" });
+    return;
+  }
+  const username = req.body.user;
+  const artist = req.body.artist;
+  const user = await User.findOne({ username: username });
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+  if (user.following.includes(artist)) {
+    res.status(400).send({ message: "User already following artist" });
+    return;
+  }
+  const following = user.following;
+  following.push(artist);
   try {
-    const userEmail = req.body.userEmail;
-    const followEmail = req.body.followEmail;
-    const user = await User.findOne({ email: userEmail });
-    const userToFollow = await User.findOne({ email: followEmail });
-    if (!user) {
-      res.status(404).send({
-        message: "Could not find user",
-      });
-    } else if (!userToFollow) {
-      res.status(404).send({
-        message: "Could not find user to follow",
-      });
-    } else {
-      if (!user.following.includes(userToFollow._id)) {
-        const following = user.following;
-        following.push(userToFollow._id);
-        user.following = following;
-        await user.save();
-        res.status(202).send(user);
-      } else {
-        res.status(400).send({
-          message: "Already following",
-        });
-      }
-    }
+    user.following = following;
+    await user.save();
+    res.send({ message: "Successfully followed artist", user });
   } catch (err) {
-    res.status(500).send({
-      message: "Error following user",
-      err,
-    });
+    res.status(500).send({ message: "Error while following artist", err });
   }
 });
 
-// Remove user from user's following list
+// Unfollow artist
 router.delete("/", async (req, res) => {
-  if (req.body.userEmail && req.body.unfollowEmail) {
-    const userEmail = req.body.userEmail;
-    const unfollowEmail = req.body.unfollowEmail;
-    const user = await User.findOne({ email: userEmail });
-    const userToUnfollow = await User.findOne({ email: unfollowEmail });
-    if (!user) {
-      res.status(404).send({
-        message: "Could not find user",
-      });
-    } else if (!userToUnfollow) {
-      res.status(404).send({
-        message: "Could not find user to unfollow",
-      });
-    } else {
-      user.following = user.following.filter((u) => u != userToUnfollow._id);
-      await user.save();
-      res.status(204).send({
-        message: "Successfully unfollowed user",
-        user,
-      });
-    }
-  } else {
-    res.status(400).send({
-      message: "User email or email of user to unfollow not provided",
-    });
+  if (!(req.body.user && req.body.artist)) {
+    res.status(400).send({ message: "Missing required params" });
+    return;
+  }
+  const user = await User.findOne({ username: username });
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+  try {
+    user.following = user.following.filter(
+      (artist) => artist !== req.body.artist
+    );
+    await user.save();
+    res.send({ message: "Successfully unfollowed artist", user });
+  } catch (err) {
+    res.status(500).send({ message: "Error while unfollowing artist", err });
   }
 });
 

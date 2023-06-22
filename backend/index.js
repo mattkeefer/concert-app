@@ -17,10 +17,12 @@ app.use(express.json());
 const userRoute = require("./routes/User.js");
 const concertRoute = require("./routes/Concert.js");
 const interestRoute = require("./routes/Interest.js");
+const friendRoute = require("./routes/Friend.js");
 const followingRoute = require("./routes/Following.js");
 app.use("/users", userRoute);
 app.use("/concerts", concertRoute);
 app.use("/interests", interestRoute);
+app.use("/friends", friendRoute);
 app.use("/followings", followingRoute);
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -45,17 +47,14 @@ const auth = async (req, res, next) => {
   }
 };
 
-// Register a new user using email, username, password
+// Register a new user using username, password
 app.post("/register", (req, res) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hashedPassword) => {
       const user = new User({
-        email: req.body.email,
         username: req.body.username,
         password: hashedPassword,
-        spotifyId: req.body.spotifyId,
-        friends: [],
       });
       user
         .save()

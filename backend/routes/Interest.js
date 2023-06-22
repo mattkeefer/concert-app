@@ -9,8 +9,8 @@ const Interest = mongoose.model("Interest", interestSchema);
 
 // Get interest pairs involving user, concert, or all pairs
 router.get("/", async (req, res) => {
-  if (req.query.userEmail) {
-    const data = await Interest.find({ userEmail: req.query.userEmail });
+  if (req.query.user) {
+    const data = await Interest.find({ username: req.query.user });
     res.send(data);
   } else if (req.query.concertID) {
     const data = await Interest.find({ concertID: req.query.concertID });
@@ -24,26 +24,26 @@ router.get("/", async (req, res) => {
 // Add (user, concert) pair to interest collection
 router.post("/", async (req, res) => {
   try {
-    const userEmail = req.body.userEmail;
+    const username = req.body.user;
     const concertID = req.body.concertID;
-    const user = await User.findOne({ email: userEmail });
+    const user = await User.findOne({ username: username });
     const concert = await Concert.findOne({ id: concertID });
     if (!user) {
       res.status(400).send({
-        message: "Unknown user email provided",
+        message: "Unknown username",
       });
     } else if (!concert) {
       res.status(400).send({
-        message: "Unknown concert id provided",
+        message: "Unknown concert id",
       });
     } else {
       const dupInterest = await Interest.findOne({
-        userEmail,
+        username,
         concertID,
       });
       if (!dupInterest) {
         const interest = new Interest({
-          userEmail,
+          username,
           concertID,
         });
         interest.save().then((result) => {
@@ -68,9 +68,9 @@ router.post("/", async (req, res) => {
 
 // Remove (user, concert) pair from interest collection
 router.delete("/", async (req, res) => {
-  if (req.body.userEmail && req.body.concertID) {
+  if (req.body.user && req.body.concertID) {
     Interest.deleteOne({
-      userEmail: req.body.userEmail,
+      username: req.body.user,
       concertID: req.body.concertID,
     })
       .then((response) => {
@@ -86,7 +86,7 @@ router.delete("/", async (req, res) => {
       });
   } else {
     res.status(400).send({
-      message: "User email or concert ID not provided",
+      message: "Username or concert ID not provided",
     });
   }
 });

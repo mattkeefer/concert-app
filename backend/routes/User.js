@@ -5,10 +5,10 @@ const { userSchema } = require("../db/schemas");
 
 const User = mongoose.model("User", userSchema);
 
-// Get user with given email or get all users
+// Get user with given username or get all users
 router.get("/", async (req, res) => {
-  if (req.query.email) {
-    const data = await User.findOne({ email: req.query.email });
+  if (req.query.username) {
+    const data = await User.findOne({ username: req.query.username });
     res.send(data);
   } else {
     const data = await User.find({});
