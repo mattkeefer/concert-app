@@ -7,7 +7,7 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const [isSignedIn, setIsSignedIn, token, setToken, username, setUsername] =
     useContext(userDetailsContext);
-  const [email, setEmail] = useState("");
+  const [typedUsername, setTypedUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const register = () => {
@@ -20,10 +20,10 @@ const LoginScreen = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ typedUsername, password }),
     };
     fetch(
-      "https://e66f-2601-188-c880-8280-8536-884d-f81c-277.ngrok-free.app/login",
+      "https://635d-2601-18f-380-3c0-3c47-baff-228e-13bb.ngrok-free.app/login",
       options
     )
       .then((res) => res.json())
@@ -39,9 +39,9 @@ const LoginScreen = () => {
     <View style={styles.screen}>
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        onChangeText={setEmail}
-        value={email}
+        placeholder="Username"
+        onChangeText={setTypedUsername}
+        value={typedUsername}
         multiline={false}
       />
       <TextInput
@@ -53,17 +53,17 @@ const LoginScreen = () => {
         secureTextEntry={true}
       />
       <View style={styles.buttonContainer}>
-        <Pressable style={[styles.button, { width: 300 }]} onPress={register}>
-          <Text style={[styles.buttonText, { fontWeight: "normal" }]}>
-            Create a new account
-          </Text>
-        </Pressable>
-        <Text style={styles.text}>or</Text>
         <Pressable
           style={[styles.button, { backgroundColor: "#F2305F" }]}
           onPress={login}
         >
           <Text style={styles.buttonText}>Login</Text>
+        </Pressable>
+        <Text style={styles.text}>or</Text>
+        <Pressable style={[styles.button, { width: 300 }]} onPress={register}>
+          <Text style={[styles.buttonText, { fontWeight: "normal" }]}>
+            Create a new account
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 30,
-    flexDirection: "column-reverse",
+    flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",

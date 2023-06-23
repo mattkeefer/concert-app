@@ -17,7 +17,7 @@ const SignupScreen = () => {
       body: JSON.stringify({ email, username, password }),
     };
     fetch(
-      "https://e66f-2601-188-c880-8280-8536-884d-f81c-277.ngrok-free.app/register",
+      "https://635d-2601-18f-380-3c0-3c47-baff-228e-13bb.ngrok-free.app/register",
       options
     )
       .then((res) => res.json())

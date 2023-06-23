@@ -17,13 +17,19 @@ const EventDetailScreen = () => {
   const route = useRoute();
   const { eventId, name, url, date, venue, images } = route.params;
   const navigation = useNavigation();
+  const dateObject = new Date(date);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "",
-      headerBackTitle: " ",
+      headerBackTitle: "Back",
+      headerShadowVisible: false,
+      headerStyle: { backgroundColor: "#111" },
+      headerTintColor: "#ddd",
     });
   }, []);
+
+  const markInterest = async () => {};
 
   return (
     <ScrollView style={styles.screen}>
@@ -54,12 +60,15 @@ const EventDetailScreen = () => {
           </View>
         </View>
       </View>
+      <View style={styles.infoSection}></View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor: "#111",
+  },
   heading: {
     height: 500,
     flex: 1,
@@ -78,6 +87,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
+  },
+  infoSection: {
+    backgroundColor: "#111",
+    height: 500,
   },
   title: {
     color: "white",

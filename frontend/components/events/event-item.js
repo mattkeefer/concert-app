@@ -5,11 +5,13 @@ import {
   Text,
   View,
   ImageBackground,
+  Image,
 } from "react-native";
 import { memo } from "react";
 
 const EventItem = ({ id, name, url, date, venue, images }) => {
   const navigation = useNavigation();
+  const dateObject = new Date(date);
   return (
     <TouchableOpacity
       style={styles.card}
@@ -24,34 +26,20 @@ const EventItem = ({ id, name, url, date, venue, images }) => {
         });
       }}
     >
-      <ImageBackground
-        style={styles.img}
-        imageStyle={{ borderRadius: 10 }}
-        source={{ uri: images[0] }}
-        resizeMode="cover"
-      >
-        <View style={{ flex: 3 }}></View>
-        <View style={styles.text}>
-          <View style={{ flex: 1, justifyContent: "flex-start" }}>
-            <Text numberOfLines={2} style={styles.header}>
-              {name}
-            </Text>
-          </View>
-          <View style={{ flex: 1, justifyContent: "flex-start" }}>
-            <Text numberOfLines={1} style={styles.body}>
-              {date
-                .toLocaleDateString()
-                .substring(0, startTime.toLocaleDateString().indexOf("/", 3))}
-            </Text>
-            <Text numberOfLines={1} style={styles.body}>
-              {venue.name}
-            </Text>
-            <Text numberOfLines={1} style={[styles.body, { color: "#bbb" }]}>
-              {venue.city}, {venue.stateCode}, {venue.countryCode}
-            </Text>
-          </View>
-        </View>
-      </ImageBackground>
+      <Image style={styles.img} source={{ uri: images[0] }} />
+      <View style={styles.textContainer}>
+        <Text numberOfLines={1} style={styles.title}>
+          {name}
+        </Text>
+        <Text numberOfLines={1} style={styles.body}>
+          {dateObject
+            .toString()
+            .substring(0, dateObject.toString().indexOf(" ", 8))}
+        </Text>
+        <Text numberOfLines={1} style={styles.body}>
+          {venue.name}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -60,27 +48,25 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 10,
-    height: 250,
   },
   img: {
-    flex: 1,
+    height: 160,
+    width: "100%",
+    borderRadius: 15,
   },
-  text: {
-    flex: 2,
-    padding: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+  textContainer: {
+    marginVertical: 10,
+    marginLeft: 5,
   },
-  header: {
-    fontWeight: "bold",
-    color: "white",
-    fontSize: 15,
-    textTransform: "uppercase",
+  title: {
+    color: "#F2305F",
+    fontSize: 16,
+    textTransform: "capitalize",
+    fontWeight: "600",
   },
   body: {
-    color: "#eee",
-    fontSize: 12,
+    color: "white",
+    fontSize: 14,
   },
 });
 

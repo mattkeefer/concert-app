@@ -8,7 +8,7 @@ const EventList = ({ data }) => {
         id={item.id}
         name={item.name}
         url={item.url}
-        date={new Date(item.dates.start.dateTime)}
+        date={item.dates.start.dateTime}
         venue={{
           name: item._embedded.venues[0].name,
           postalCode: item._embedded.venues[0].postalCode,

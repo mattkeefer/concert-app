@@ -33,7 +33,17 @@ export const HomeStack = (props) => {
         <Stack.Screen
           name="Concerts"
           component={HomeScreen}
-          options={{ title: "Upcoming Concerts" }}
+          options={{
+            title: "Upcoming Concerts",
+            headerTintColor: "white",
+            headerStyle: { backgroundColor: "#121212", borderColor: "black" },
+            headerShadowVisible: false,
+            headerTitleAlign: "left",
+            headerTitleStyle: {
+              fontSize: 23,
+              marginTop: 15,
+            },
+          }}
         />
         <Stack.Screen name="Event" component={EventDetailScreen} />
       </Stack.Navigator>

@@ -8,7 +8,7 @@ export default function App() {
     <NavigationContainer>
       <UserDetailsProvider>
         <HomeTabs />
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
       </UserDetailsProvider>
     </NavigationContainer>
   );

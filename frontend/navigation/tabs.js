@@ -1,13 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { HomeStack } from "./stack";
+import { HomeStack } from "./home-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LoginScreen from "../screens/login-screen";
 import { useContext } from "react";
 import { userDetailsContext } from "../components/user-details-context";
+import { SearchStack } from "./search-stack";
 
 const Tab = createBottomTabNavigator();
 
-export const HomeTabs = (props) => {
+export const HomeTabs = () => {
   const [isSignedIn, setIsSignedIn, token, setToken] =
     useContext(userDetailsContext);
 
@@ -19,8 +20,9 @@ export const HomeTabs = (props) => {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "black",
+          tabBarActiveTintColor: "white",
           tabBarInactiveTintColor: "grey",
+          tabBarStyle: { backgroundColor: "black", borderTopWidth: 0 },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === "Home") {
@@ -41,7 +43,7 @@ export const HomeTabs = (props) => {
         />
         <Tab.Screen
           name="Search"
-          component={LoginScreen}
+          component={SearchStack}
           options={{ title: "Search" }}
         />
         <Tab.Screen
